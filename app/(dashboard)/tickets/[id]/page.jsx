@@ -1,6 +1,15 @@
 import { notFound } from "next/navigation";
 export const dynamicParams = true;
 
+export async function generateMetadata({ params }) {
+  const { id } = params;
+  const response = await fetch(`http://localhost:4000/tickets/${id}`);
+  const ticket = await response.json();
+  return {
+    title: `Helpdesk | ${ticket.title}`,
+  };
+}
+
 export async function generateStaticParams() {
   const res = await fetch("http://localhost:4000/tickets");
   const tickets = await res.json();
@@ -9,9 +18,6 @@ export async function generateStaticParams() {
 }
 
 async function getTicket(id) {
-  //imitate delay
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
   const res = await fetch("http://localhost:4000/tickets/" + id, {
     next: {
       revalidate: 60,
