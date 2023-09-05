@@ -15,7 +15,6 @@ async function getTickets() {
 
 export default async function TicketList() {
   const tickets = await getTickets();
-  console.log(tickets, "data");
 
   return (
     <>
